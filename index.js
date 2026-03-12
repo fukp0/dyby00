@@ -69,7 +69,7 @@ function getRegisteredUserCount() {
  * Route to generate the pairing code
  */
 
-app.get('/users', (req, res) => {
+router.get('/users', (req, res) => {
     res.json({ total: getTotalUsers() });
 });
 
