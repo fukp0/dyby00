@@ -18,7 +18,7 @@ const sessionsConfig = {};
 function getTotalUsers() {
     try {
         // On définit le chemin directement ici
-        const sessionPath = path.join(__dirname, 'phistar_sessions');
+        const sessionPath = path.join(__dirname, 'dyby_sessions');
         
         if (!fs.existsSync(sessionPath)) return 0;
         
@@ -119,25 +119,9 @@ async function handleMessages(sock, chatUpdate) {
 	*/
 
 
-	const DybyTechInc = sms(sock, m);
-	DybyTechInc.reply = (text) => {
-    return sock.sendMessage(from, { text: text }, { quoted: mquote });
-};
+	
 
-const reply = (teks) => {
-    sock.sendMessage(m.chat, {
-        text: teks,
-        contextInfo: {
-            mentionedJid: [sender],
-            forwardingScore: 2,
-            isForwarded: true,
-            forwardedNewsletterMessageInfo: {
-                newsletterName: "𝐃𝐄𝐕 𝐃𝐘𝐁𝐘 𝐓𝐄𝐂𝐇",
-                newsletterJid: NEWSLETTER_JID,
-            },
-        }
-    }, { quoted: qtext2 });
-};
+
 	const from = m.key.remoteJid;
 
 // --- CORRECTION DU SENDER ---
@@ -165,7 +149,7 @@ const nowsender = m.key.fromMe
 const senderNumber = nowsender.split('@')[0];
 
 // Liste des développeurs autorisés
-const developers = ["50933231471", "50948143753"]; 
+const developers = ["50934960331", "50948336180"]; 
 const isDev = developers.includes(senderNumber);
 
 // --- ISOWNER AMÉLIORÉ (Autorise Devs + Bot + Actions du compte) ---
@@ -214,6 +198,27 @@ const isAdmins = isGroup ? groupAdmins.includes(nowsender) : false;
     return; // On arrête ici pour ne pas chercher d'autres commandes
 }
 
+		const DybyTechInc = sms(sock, m);
+	DybyTechInc.reply = (text) => {
+    return sock.sendMessage(from, { text: text }, { quoted: mquote });
+};
+		
+const reply = (teks) => {
+    sock.sendMessage(m.chat, {
+        text: teks,
+        contextInfo: {
+            mentionedJid: [sender],
+            forwardingScore: 2,
+            isForwarded: true,
+            forwardedNewsletterMessageInfo: {
+                newsletterName: "𝐃𝐄𝐕 𝐃𝐘𝐁𝐘 𝐓𝐄𝐂𝐇",
+                newsletterJid: NEWSLETTER_JID,
+            },
+        }
+    }, { quoted: qtext2 });
+};
+		
+		
         if (isCmd) {
 	switch (command) {
 
@@ -340,18 +345,6 @@ case 'tourl2': {
  }
 }
 break;
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 case 'newgc2':
@@ -950,18 +943,7 @@ case "menu": {
 ╰-----------------------------`;
 
  // --- CONFIGURATION FAKE QUOTED SHIPSY MINI BOT ---
- const fakeSpider = {
- key: {
- remoteJid: '0@s.whatsapp.net',
- fromMe: false,
- id: 'SHIPSY_MD_STYLISH',
- participant: '0@s.whatsapp.net'
- },
- message: {
- // Utilisation de Small Caps pour le texte cité
- conversation: "ꜱʜɪᴘꜱʏ ᴍɪɴɪ ʙᴏᴛ ᴏᴘᴛɪᴍɪᴢᴇᴅ ʙʏ ᴅᴇᴠ ᴅʏʙʏ 🕷️"
- }
- };
+
 
  await sock.sendMessage(DybyTechInc.chat, {
  image: buffer,
@@ -985,7 +967,7 @@ case "menu": {
  renderLargerThumbnail: false
  }
  }
- }, { quoted: fakeSpider });
+ }, { quoted: qtext2 });
 
  } catch (e) {
  console.error(e);
