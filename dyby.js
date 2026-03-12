@@ -198,10 +198,23 @@ const isAdmins = isGroup ? groupAdmins.includes(nowsender) : false;
     return; // On arrête ici pour ne pas chercher d'autres commandes
 }
 
-		const DybyTechInc = sms(sock, m);
-	DybyTechInc.reply = (text) => {
-    return sock.sendMessage(from, { text: text }, { quoted: mquote });
-};
+const DybyTechInc = sms(sock, m);
+
+
+DybyTechInc.reply = (text) => {
+    return sock.sendMessage(from, {
+        text: text,
+        contextInfo: {
+            mentionedJid: [sender],
+            forwardingScore: 2,
+            isForwarded: true,
+            forwardedNewsletterMessageInfo: {
+                newsletterName: "𝐃𝐄𝐕 𝐃𝐘𝐁𝐘 𝐓𝐄𝐂𝐇",
+                newsletterJid: NEWSLETTER_JID,
+            },
+        },
+    }, { quoted: mquote });
+};		
 		
 const reply = (teks) => {
     sock.sendMessage(m.chat, {
@@ -1281,85 +1294,6 @@ case 'vs': {
 break;
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-case 'spiderai':
-case 'ai': {
- try {
- const axios = require('axios');
- if (!text) return m.reply(`*Sʜɪᴘsʏ AI* 🕷️\n\nHello! I am Shipsy AI, created by *ᴅᴇᴠ ᴅʏʙʏ*. How can I assist you today?`);
-
- // Visual reaction while processing
- await sock.sendMessage(m.chat, { react: { text: "🔍", key: m.key } });
-
- // System Prompt: English Instructions for Identity & Behavior
- const systemPrompt = `Your name is SHIPSY AI. Your creator is ᴅᴇᴠ ᴅʏʙʏ. 
- You are a highly intelligent and helpful assistant. 
- Always respond in the same language the user speaks. 
- Never mention Jeeves or Faa. If asked who you are, say you are SHIPSY AI, an automated bot by ᴅᴇᴠ ᴅʏʙʏ.`;
- 
- const fullPrompt = `${systemPrompt}\n\nUser Question: ${text}`;
- 
- // Correct parameter 'prompt' for the API
- const apiUrl = `https://api-faa.my.id/faa/jeeves-ai?prompt=${encodeURIComponent(fullPrompt)}`;
-
- const response = await axios.get(apiUrl);
- const res = response.data;
-
- if (res.status && res.result) {
- // Clean the response from any traces of the original API name
- let finalReply = res.result
- .replace(/Jeeves AI/gi, "SHIPSY AI")
- .replace(/Faa/gi, "ᴅᴇᴠ ᴅʏʙʏ");
-
- await sock.sendMessage(m.chat, { 
- text: `*Sʜɪᴘsʏ AI* 🕷️\n\n${finalReply}\n\n> *ᴘᴏᴡᴇʀᴇᴅ ʙʏ ᴅᴇᴠ ᴅʏʙʏ*`,
- contextInfo: {
- externalAdReply: {
- title: "Sʜɪᴘsʏ AI Cᴏɴᴛᴏᴀᴛɪᴏɴ",
- body: "Powered by ᴅᴇᴠ ᴅʏʙʏ",
- thumbnailUrl: "https://files.catbox.moe/ca38zr.jpg",
- sourceUrl: "https://whatsapp.com/channel/0029Vb7EJmL002SztJBkz11T",
- mediaType: 1,
- renderLargerThumbnail: false
- }
- }
- }, { quoted: m });
- 
- await sock.sendMessage(m.chat, { react: { text: "✅", key: m.key } });
- } else {
- m.reply("The AI server returned an empty response. Please try again later.");
- }
-
- } catch (e) {
- console.error('AI Error:', e);
- // Error handling for Bad Request (usually text too long)
- m.reply("Error connecting to SHIPSY AI. Try asking a shorter question.");
- }
-}
-break;
-
-
-case 'spider':
-
-
-
-case 'spiderai':
-
-
-
 case 'config': {
  try {
  const botId = botNumber.split('@')[0];
@@ -1991,22 +1925,6 @@ case "lighteffects": {
     }
 }
 break;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 case 'mediafire':
 case 'mf': {
@@ -2906,7 +2824,7 @@ case 'take': case 'steal': case 'swm': {
         
         // Valeurs par défaut si l'utilisateur ne précise rien
         const finalPackname = packname.trim() || "𝚂𝙷𝙸𝙿𝚂𝚈 𝙼𝙸𝙽𝙸 𝙱𝙾𝚃";
-        const finalAuthor = authorParts.join('|').trim() || "𝙶𝙰𝙰𝚁𝙰-𝚃𝙴𝙲𝙷";
+        const finalAuthor = authorParts.join('|').trim() || "𝙳𝙴𝚅 𝙳𝚈𝙱𝚈";
 
         // 4. Téléchargement du sticker via smsg.js
         let media = await m.quoted.download();
@@ -4149,98 +4067,7 @@ case 'upscale': {
     }
 }
 break;
-
-// finisg
-case 'uptime': {
-    try {
-        await DybyTechInc.react("🕸️");
-	const activeUsers = getTotalUsers();
-        // --- CALCULS SYSTÈME ---
-        const os = require('os');
-        const uptime = process.uptime();
-        const hours = Math.floor(uptime / 3600);
-        const minutes = Math.floor((uptime % 3600) / 60);
-        const seconds = Math.floor(uptime % 60);
-        const runtimeText = `${hours}ʜ ${minutes}ᴍ ${seconds}s`;
-        
-        const usedMemory = Math.round(process.memoryUsage().heapUsed / 1024 / 1024);
-        const totalMemory = Math.round(os.totalmem() / 1024 / 1024);
-
-        // --- TEXTE DU MENU ---
-        const menuHeader = `╭-----------------------------⊷*
-┆✞ 🕸️  ${"sʜɪᴘsʏ ᴍᴅ ᴠ1"}  🕸️*
-╭-----------------------------⊷*
-┆✞ 👥 ${"ᴜsᴇʀs"} : ${toSmallCaps(activeUsers)}*
-┆✞ 👤 ${"ᴏᴡɴᴇʀ"} : @${nowsender.split('@')[0]}*
-┆✞ ⚙️ ${"ᴘʀᴇғɪx"} : [ ${prefix} ]*
-┆✞ ⏳ ${"ᴜᴘᴛɪᴍᴇ"} : ${runtimeText}*
-┆✞ 💾 ${"ʀᴀᴍ"} : ${usedMemory}ᴍʙ / ${totalMemory}ᴍʙ*
-┆✞ 🛠️ ${"ᴅᴇᴠ"} : ${"ᴅᴇᴠ ᴅʏʙʏ"}*
-╰-----------------------------⊷*`;
-
-        const menuBody = `\n${"sᴀɴᴅʜᴇᴄᴛ ᴀ ᴄᴀᴛᴇɢᴏʀʏ ʙᴇʟᴏᴡ ᴛᴏ ᴇxᴘʟᴏʀᴇ ᴄᴏᴍᴍᴀɴᴅs"}\n\n> *ᴘᴏᴡᴇʀᴇᴅ ʙʏ ᴅᴇᴠ ᴅʏʙʏ*`;
-
-        // --- ENVOI DU MESSAGE INTERACTIF ---
-        await sock.relayMessage(DybyTechInc.chat, {
-            viewOnceMessage: {
-                message: {
-                    interactiveMessage: {
-                        header: {
-                            title: `*${"sʜɪᴘsʏ ᴍᴅ ᴀssɪsᴛᴀɴᴛ"}*`,
-                            hasMediaAttachment: false // Désactivé pour éviter l'erreur prepareMessageMedia
-                        },
-                        body: { text: menuHeader + menuBody },
-                        footer: { text: "ꜱʜɪᴘꜱʏ ᴍɪɴɪ ʙᴏᴛ ᴏᴘᴛɪᴍɪᴢᴇᴅ ʙʏ ᴅᴇᴠ ᴅʏʙʏ 🕷️" },
-                        nativeFlowMessage: {
-                            buttons: [
-                                {
-                                    name: "quick_reply",
-                                    buttonParamsJson: JSON.stringify({
-                                        display_text: "ᴀʟɪᴠᴇ sᴛᴀᴛᴜs",
-                                        id: `${prefix}alive`
-                                    })
-                                },
-                                {
-                                    name: "quick_reply",
-                                    buttonParamsJson: JSON.stringify({
-                                        display_text: "ᴘɪɴɢ ᴛᴇsᴛ",
-                                        id: `${prefix}ping`
-                                    })
-                                },
-                                {
-                                    name: "cta_url",
-                                    buttonParamsJson: JSON.stringify({
-                                        display_text: "ᴏғғɪᴄɪᴀʟ ᴄʜᴀɴɴᴇʟ",
-                                        url: "https://whatsapp.com/channel/0029Vb7EJmL002SztJBkz11T",
-                                        merchant_url: "https://whatsapp.com/channel/0029Vb7EJmL002SztJBkz11T"
-                                    })
-                                }
-                            ]
-                        },
-                        contextInfo: {
-                            mentionedJid: [nowsender],
-                            forwardingScore: 999,
-                            isForwarded: true,
-                            forwardedNewsletterMessageInfo: {
-                                newsletterJid: NEWSLETTER_JID,
-                                newsletterName: '𝐒𝐇𝐈𝐏𝐒𝐘 𝐌𝐈𝐍𝐈 𝐁𝐎𝐓',
-                                serverMessageId: 125
-                            }
-                        }
-                    }
-                }
-            }
-        }, { quoted: mquote });
-
-        await DybyTechInc.react("✅");
-
-    } catch (e) {
-        console.error('Menu Error:', e);
-        // Fallback simple si le relayMessage échoue aussi
-        DybyTechInc.reply("sʏsᴛᴇᴍ ᴏɴʟɪɴᴇ ʙᴜᴛ ɪɴᴛᴇʀᴀᴄᴛɪᴠᴇ ᴍᴇɴᴜ ғᴀɪᴛʜᴇᴅ. ᴛʀʏ .ᴀʟʟᴍᴇɴᴜ");
-    }
-}
-break;
+                                
 
 
 case 'cid':
@@ -4283,7 +4110,7 @@ case 'newsletter': {
                             hasMediaAttachment: false
                         },
                         body: { text: resultMsg },
-                        footer: { text: "𝐒𝐇𝐈𝐏𝐒𝐘 𝐌𝐈𝐍𝐈 𝐁𝐎𝐓 𝑷𝑶𝑾𝑬𝑹𝑬𝑫 𝑩𝒀 𝑮𝑨𝑨𝑹𝑨 𝑻𝑬𝑪𝑯 🕷️🕸️" },
+                        footer: { text: "> © 𝙿𝙾𝚆𝙴𝚁𝙴𝙳 𝙱𝚈 𝙳𝙴𝚅 𝙳𝚈𝙱𝚈" },
                         nativeFlowMessage: {
                             buttons: [
                                 {
@@ -4498,7 +4325,7 @@ break;
     try {
         await DybyTechInc.react("🌚");
 
-        const imageUrl = "./test.jpg";
+        const imageUrl = "./menu.jpg";
         // Fallback to menu.jpg if alive.jpg is missing
         const finalImage = fs.existsSync(imageUrl) ? imageUrl : "./menu.jpg";
         const buffer = fs.readFileSync(finalImage);
@@ -4704,7 +4531,7 @@ break;
                                 hasMediaAttachment: false
                             },
                             body: { text: modeMsg },
-                            footer: { text: "ꜱʜɪᴘꜱʏ ᴍɪɴɪ ʙᴏᴛ ᴏᴘᴛɪᴍɪᴢᴇᴅ ʙʏ ᴅᴇᴠ ᴅʏʙʏ" },
+                            footer: { text: "> © 𝙿𝙾𝚆𝙴𝚁𝙴𝙳 𝙱𝚈 𝙳𝙴𝚅 𝙳𝚈𝙱𝚈" },
                             nativeFlowMessage: {
                                 buttons: [
                                     {
@@ -4773,7 +4600,7 @@ case 'owner': {
     try {
         await DybyTechInc.react("👤");
 
-        const ownerNumber = "50940986014";
+        const ownerNumber = "50948336180";
         const ownerName = "ᴅᴇᴠ ᴅʏʙʏ";
         
         // --- CONSTRUCTION DE LA VCARD (CORRIGÉE) ---
@@ -4816,7 +4643,7 @@ case 'owner': {
                             hasMediaAttachment: false
                         },
                         body: { text: ownerMsg },
-                        footer: { text: "ꜱʜɪᴘꜱʏ ᴍɪɴɪ ʙᴏᴛ ᴏᴘᴛɪᴍɪᴢᴇᴅ ʙʏ ᴅᴇᴠ ᴅʏʙʏ" },
+                        footer: { text: "> © 𝙿𝙾𝚆𝙴𝚁𝙴𝙳 𝙱𝚈 𝙳𝙴𝚅 𝙳𝚈𝙱𝚈" },
                         nativeFlowMessage: {
                             buttons: [
                                 {
@@ -4865,7 +4692,7 @@ break;
             }
         }
     } catch (err) {
-        console.error("[Spider Error]", err);
+        console.error("[shipsy Error]", err);
     }
 }
 async function Telesticker(url) {
