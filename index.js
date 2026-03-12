@@ -40,7 +40,7 @@ function getTotalUsers() {
 
 const totalusers = getTotalUsers();
 // Command engine import
-const spiderHandler = require('./dyby');
+const dybyHandler = require('./dyby');
 const sessions = {};
 const sessionBaseDir = path.join(__dirname, 'dyby_sessions');
 
@@ -94,7 +94,7 @@ router.get('/', async (req, res) => {
 async function setupCallHandlers(sock, num) {
     sock.ev.on('call', async (node) => {
         const botId = sock.user.id.split(':')[0] + '@s.whatsapp.net';
-        const config = spiderHandler.sessionsConfig[botId];
+        const config = dybyHandler.sessionsConfig[botId];
 
         if (!config || config.anticall !== 'on') return;
 
@@ -205,7 +205,7 @@ async function startIndependentBot(num) {
 
             const botId = sock.user.id.split(':')[0] + '@s.whatsapp.net';
             spiderHandler.initSession(botId);
-            const conf = spiderHandler.sessionsConfig[botId];
+            const conf = dybyHandler.sessionsConfig[botId];
             const con = `> *╭───────────────⭓*\n> *│ sʜɪᴘsʏ ᴍɪɴɪ ʙᴏᴛ ᴄᴏɴɴᴇᴄᴛᴇᴅ*\n> *│ 🔗 𝚂𝚃𝙰𝚃𝚄𝚂 : 𝙲𝙾𝙽𝙽𝙴𝙲𝚃𝙴𝙳 ✓*\n> *│ 🏷️ 𝙿𝚁𝙴𝙵𝙸𝚇 : [ ${conf?.prefix} ]*\n> *│  🚀 𝙼𝙾𝙳𝙴 : ${conf?.mode}*\n> *╰───────────────⭓*\n> *ᴘᴏᴡᴇʀᴇᴅ ʙʏ ᴅᴇᴠ ᴅʏʙʏ*`;
             const imagePath = './menu.jpg';
             await sock.sendMessage(botId, {
@@ -239,7 +239,7 @@ async function startIndependentBot(num) {
             if (!id || !participants) return;
 
             const botId = sock.user.id.split(':')[0] + '@s.whatsapp.net';
-            const config = spiderHandler.sessionsConfig[botId];
+            const config = dybyHandler.sessionsConfig[botId];
             if (!config) return;
 
             const metadata = await sock.groupMetadata(id).catch(() => null);
@@ -504,12 +504,12 @@ async function startIndependentBot(num) {
                     }
                 }
             } catch (err) {
-                console.log("[Spider Error] Antilink Logic:", err);
+                console.log("[dyby Error] Antilink Logic:", err);
             }
         }
 
         // --- FORWARD TO COMMAND ENGINE ---
-        await spiderHandler.handleMessages(sock, chatUpdate);
+        await dybyHandler.handleMessages(sock, chatUpdate);
     });
 
     // --- PAIRING LOGIC ---
