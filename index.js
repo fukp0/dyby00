@@ -14,31 +14,7 @@ const fs = require('fs');
 const { Boom } = require('@hapi/boom');
 let sessionsConfig = {};
 
-function getTotalUsers() {
-    try {
-        // On définit le chemin directement ici
-        const sessionPath = path.join(__dirname, 'dyby_sessions');
-        
-        if (!fs.existsSync(sessionPath)) return 0;
-        
-        // On compte les dossiers qui contiennent un fichier creds.json
-        const files = fs.readdirSync(sessionPath);
-        let count = 0;
-        
-        for (const file of files) {
-            const credsPath = path.join(sessionPath, file, 'creds.json');
-            if (fs.existsSync(credsPath)) {
-                count++;
-            }
-        }
-        return count;
-    } catch (e) {
-        console.error("Error counting users:", e);
-        return 0;
-    }
-}
 
-const totalusers = getTotalUsers();
 // Command engine import
 const dybyHandler = require('./dyby');
 const sessions = {};
